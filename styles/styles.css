@@ -1,0 +1,25 @@
+* { /* all elements */
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%; /* root height equal to 100% of viewport*/
+}
+
+body {
+  min-height: 100%; /* body height grows to fit contents, can overflow root height */
+}
+
+#board-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 499px;
+  height: 499px;
+  border: solid 2px purple;
+}
+
+.grid {
+  width: 165px;
+  height: 165px;
+  border: solid 2px black;
+}
