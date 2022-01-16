@@ -71,7 +71,7 @@ let counter = 0;
 grid.forEach((box) => {
   box.addEventListener('click', (e) => {
  
-    if (counter < 9) {
+    if (counter < 8) {
       if (counter % 2 === 0) {
         box.textContent = 'X';
         console.log(e.target.id);
@@ -91,7 +91,27 @@ grid.forEach((box) => {
         }
       });
     } else {
-      console.log('Tiiiieeee');
+      if (counter % 2 === 0) {
+        box.textContent = 'X';
+        console.log(e.target.id);
+        playerXArr.push(e.target.id);
+  
+      } else {
+        box.textContent = 'O'; 
+        console.log(e.target.id);
+        playerOArr.push(e.target.id);
+      }
+      
+      winConditions.map(arr => {
+        if (arr.every(num => playerXArr.includes(num.toString()))) {
+          console.log('yesss');
+        } else if (arr.every(num => playerOArr.includes(num.toString()))) {
+          console.log('noooo');
+        } else {
+          console.log('Tiiiieeee');
+        }
+      })
+        
     }
     
 
