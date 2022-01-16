@@ -19,7 +19,12 @@ body {
 }
 
 .grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 165px;
   height: 165px;
   border: solid 2px black;
+  font-size: 70px;
+  font-weight: bold;
 }
