@@ -51,7 +51,6 @@ for (let i = 0; i < arr.length; i++) {
   gameBoard.appendChild(grid);
 }
 
-
 let winConditions = [
   [0, 1, 2],
   [3, 4, 5],
@@ -62,64 +61,36 @@ let winConditions = [
   [0, 4, 8], 
   [2, 4, 6] 
 ]
-
 let playerXArr = [];
 let playerOArr = [];
 
 let grid = document.querySelectorAll('.grid');
 let counter = 0;
-grid.forEach((box) => {
-  box.addEventListener('click', (e) => {
- 
-    if (counter < 8) {
-      if (counter % 2 === 0) {
+grid.forEach(box => {
+  box.addEventListener('click', (e) => { 
+    if (counter < 9) {
+
+      if (counter % 2 === 0) { // even #; player X turn
         box.textContent = 'X';
-        console.log(e.target.id);
         playerXArr.push(e.target.id);
-  
-      } else {
+      } else { // odd #; player O turn
         box.textContent = 'O'; 
-        console.log(e.target.id);
         playerOArr.push(e.target.id);
       }
-      
+
       winConditions.map(arr => {
         if (arr.every(num => playerXArr.includes(num.toString()))) {
           console.log('yesss');
         } else if (arr.every(num => playerOArr.includes(num.toString()))) {
           console.log('noooo');
+        } else if (counter === 8) {
+          console.log('Tiiieee');
         }
       });
-    } else {
-      if (counter % 2 === 0) {
-        box.textContent = 'X';
-        console.log(e.target.id);
-        playerXArr.push(e.target.id);
-  
-      } else {
-        box.textContent = 'O'; 
-        console.log(e.target.id);
-        playerOArr.push(e.target.id);
-      }
-      
-      winConditions.map(arr => {
-        if (arr.every(num => playerXArr.includes(num.toString()))) {
-          console.log('yesss');
-        } else if (arr.every(num => playerOArr.includes(num.toString()))) {
-          console.log('noooo');
-        } else {
-          console.log('Tiiiieeee');
-        }
-      })
-        
-    }
-    
 
 
-
-    // console.log(counter);
-    console.log(playerXArr, playerOArr);
+    };
     counter++;
-  })
+  });
+});
 
-})
