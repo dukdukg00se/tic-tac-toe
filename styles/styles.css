@@ -80,6 +80,7 @@ main {
   font-size: 26px;
   width: 170px;
   align-self: center;
+  margin: 20px auto 0;
 }
 #reset-btn:hover {
   background-color: #ffffffb3;
