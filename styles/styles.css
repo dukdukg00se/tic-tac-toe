@@ -72,6 +72,9 @@ main {
   background-color: #747274;
   color: black;
 }
+.grid:hover {
+  background-color: #5c5b5c;
+}
 
 #reset-btn {
   border-radius: 6px;
@@ -93,7 +96,7 @@ footer {
 
 /* modal background */
 #modal {
-  display: block; /* Hidden by default */
+  display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
@@ -136,3 +139,26 @@ footer {
   text-decoration: none;
   cursor: pointer;
 }
+
+/*
+transition-property: all;
+transition-duration: 1s;
+animation-timing-function: ease-in-out;
+animation-name: size;
+animation-fill-mode: forwards;
+animation-duration: 1s;
+
+.animateMarker {
+  animation-name: animateMarker;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animateMarker {
+  0% {font-size: 0;}
+  60% {font-size: 9em;}
+  100% {font-size: 7em;} 
+}
+
+
+*/
