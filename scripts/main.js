@@ -6,13 +6,13 @@ const player = (name, mark) => {
 
 // gameboard module to set and control board during play
 const board = (() => {
-  const board = document.querySelector('#board-container');
+  const gameBoard = document.querySelector('#board-container');
   // set board to start game
   for (let i = 0; i < 9; i++) {
     const grid = document.createElement('div');
     grid.classList.add('grid');
     grid.id = i ;
-    board.appendChild(grid);
+    gameBoard.appendChild(grid);
   }
   // erase player marks function
   const reset = () => {
@@ -24,11 +24,11 @@ const board = (() => {
   };
   // disable board for play
   const disableBoard = () => {
-    board.style.pointerEvents = 'none';
+    gameBoard.style.pointerEvents = 'none';
   }
   // enable board for play 
   const enableBoard = () => {
-    board.style.pointerEvents = '';
+    gameBoard.style.pointerEvents = '';
   }
   return { reset, disableBoard, enableBoard };
 })();
