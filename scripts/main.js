@@ -41,13 +41,11 @@ const gamePlay = (() => {
   // set players
   const playerX = player("Player X", "X");
   const playerO = player("Player O", "O");
-
   // start conditions
   let activePlayer = playerX;
   let counter = 0;
   let gameOver = false;
   let winner = false;
-
   // function to check for a winner
   const checkWinner = (moves) => {
     const winConditions = [
@@ -114,13 +112,6 @@ const gamePlay = (() => {
 
   let reset = document.querySelector('#reset-btn');
   reset.addEventListener('click', resetGame);
-
-
-  const getCounter = () => counter;
-  const getGameOver = () => gameOver;
-  const getActivePlayer = () => activePlayer;
-
-  return { getCounter, getGameOver, getActivePlayer };
 })();
 
 
@@ -136,7 +127,6 @@ const displayController = (() => {
     playerX.classList.toggle('active');
     playerO.classList.toggle('active');
   }
-
   const modalController = (winnerDeclared, winnerName) => {
     winnerDeclared ? modalHeader.textContent = `${winnerName} Wins!` : modalHeader.textContent = "Its a Tie!";
     modal.style.display = "block";
@@ -144,6 +134,11 @@ const displayController = (() => {
 
   closeBtn.addEventListener('click', () => {
     modal.style.display = "none";
+  });
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
   });
 
   return { showActivePlayer, modalController, playerX, playerO };
