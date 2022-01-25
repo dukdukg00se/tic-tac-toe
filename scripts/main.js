@@ -1,23 +1,20 @@
-// player factory
+// player factory function
 const player = (name, mark) => {
   const moves = [];
   return { name, mark, moves }
 }
 
-
-// gameboard controls
+// gameboard module to set and control board during play
 const board = (() => {
   const board = document.querySelector('#board-container');
-
   // set board to start game
-  const gameboard = document.querySelector('#board-container');
   for (let i = 0; i < 9; i++) {
     const grid = document.createElement('div');
     grid.classList.add('grid');
     grid.id = i ;
-    gameboard.appendChild(grid);
+    board.appendChild(grid);
   }
-  // function to erase marks
+  // erase player marks function
   const reset = () => {
     const grid = document.querySelectorAll('.grid');
     grid.forEach(box => {
@@ -25,11 +22,11 @@ const board = (() => {
       box.style.pointerEvents = '';
     })   
   };
-
+  // disable board for play
   const disableBoard = () => {
     board.style.pointerEvents = 'none';
   }
-
+  // enable board for play 
   const enableBoard = () => {
     board.style.pointerEvents = '';
   }
