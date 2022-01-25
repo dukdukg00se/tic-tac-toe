@@ -1,11 +1,15 @@
 // player factory
 const player = (name, mark) => {
-  const movesArr = [];
-  return { name, mark, movesArr }
+  const moves = [];
+  return { name, mark, moves }
 }
 
-// make gameboard
+
+// gameboard controls
 const board = (() => {
+  const board = document.querySelector('#board-container');
+
+  // set board to start game
   const gameboard = document.querySelector('#board-container');
   for (let i = 0; i < 9; i++) {
     const grid = document.createElement('div');
@@ -13,130 +17,134 @@ const board = (() => {
     grid.id = i ;
     gameboard.appendChild(grid);
   }
-
+  // function to erase marks
   const reset = () => {
     const grid = document.querySelectorAll('.grid');
     grid.forEach(box => {
       box.textContent = '';
+      box.style.pointerEvents = '';
     })   
   };
 
-  return { reset };
-})();
+  const disableBoard = () => {
+    board.style.pointerEvents = 'none';
+  }
 
-
-// check for winner
-const checkWinner = (() => {
-  const winConditions = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ];
-
-  const isWinner = (arr) => {
-    return winConditions.some((eachArr) => {
-      return eachArr.every((num) => arr.includes(num));
-    });
-  };
-
-  return { isWinner };
+  const enableBoard = () => {
+    board.style.pointerEvents = '';
+  }
+  return { reset, disableBoard, enableBoard };
 })();
 
 
 const gamePlay = (() => {
-  const playerX = player('Player X', 'X');
-  const playerO = player('Player O', 'O');
+  // set players
+  const playerX = player("Player X", "X");
+  const playerO = player("Player O", "O");
+
   // start conditions
   let activePlayer = playerX;
   let counter = 0;
-  let gameWon = false;
+  let gameOver = false;
+  let winner = false;
 
-  const grid = document.querySelectorAll('.grid');
-  grid.forEach(box => {
-    box.addEventListener('click', (e) => {
-      if (counter < 9) {
-        box.textContent = activePlayer.mark;
-        activePlayer.movesArr.push(+e.target.id);
-        // console.log(checkWinner.isWinner(activePlayer.movesArr));
-        // counter++;
-        // activePlayer === playerX ? activePlayer = playerO : activePlayer = playerX;
-        // remove eventlistener from marked cells
-
-        e.target.style.pointerEvents = 'none';
-      }
-
-      if (!checkWinner.isWinner(activePlayer.movesArr)) {
-        counter++;
-        activePlayer === playerX ? activePlayer = playerO : activePlayer = playerX;
-      } else {
-        gameWon = true;
-        console.log(gameWon);
-        const modal = document.querySelector('#modal');
-        const modalHeader = document.querySelector('#modal-header');
-        modalHeader.textContent = `${activePlayer.name} Wins!`
-        modal.style.display = 'block';
-
-      }
-
-      console.log(gameWon, counter);
-
+  // function to check for a winner
+  const checkWinner = (moves) => {
+    const winConditions = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+    return winConditions.some((eachArr) => {
+      return eachArr.every((num) => moves.includes(num));
     });
-  });
-
-  // console.log(gameWon);
-  return {
-    activePlayer,
-    counter,
-    gameWon
   };
 
+  const play = (e) => {
+    if (counter < 9) {
+      e.target.textContent = activePlayer.mark;
+      activePlayer.moves.push(+e.target.id);
+      e.target.style.pointerEvents = "none";
+    }
+
+    if (checkWinner(activePlayer.moves)) {
+      gameOver = true;
+      winner = activePlayer.name;
+    } else if (counter === 8) {
+      gameOver = true;
+    }
+
+    if (gameOver) {
+      displayController.modalController(winner, activePlayer.name);
+      board.disableBoard();
+      return;
+    }
+
+    displayController.showActivePlayer();
+    counter++;
+    activePlayer === playerX
+      ? (activePlayer = playerO)
+      : (activePlayer = playerX);
+  };
+
+  const grid = document.querySelectorAll(".grid");
+  grid.forEach((box) => {
+    box.addEventListener("click", play);
+  });
+
+  const resetGame = () => {
+    if (!displayController.playerX.classList.contains('active')) {
+      displayController.playerX.classList.toggle('active');
+      displayController.playerO.classList.toggle('active');
+    }
+    playerX.moves = [];
+    playerO.moves = [];
+    activePlayer = playerX;
+    counter = 0;
+    gameOver = false;
+    winner = false;
+    board.reset();
+    board.enableBoard();
+  };
+
+  let reset = document.querySelector('#reset-btn');
+  reset.addEventListener('click', resetGame);
+
+
+  const getCounter = () => counter;
+  const getGameOver = () => gameOver;
+  const getActivePlayer = () => activePlayer;
+
+  return { getCounter, getGameOver, getActivePlayer };
 })();
 
 
-// const closeIt = (e) => {
-//   if (e.target == modal) {
-//     modal.style.display = "none";
-//   }
-// };
 
 const displayController = (() => {
+  const modal = document.querySelector('#modal');
+  const modalHeader = document.querySelector('#modal-header');
+  const closeBtn = document.querySelector('.close');
+  const playerX = document.querySelector('#player-x');
+  const playerO = document.querySelector('#player-o');
 
-
-
-  const closeModal = () => {
-    // modal.style.display = 'none';
-    // console.log(modal);
+  const showActivePlayer = () => {
+    playerX.classList.toggle('active');
+    playerO.classList.toggle('active');
   }
-  return { closeModal };
 
+  const modalController = (winnerDeclared, winnerName) => {
+    winnerDeclared ? modalHeader.textContent = `${winnerName} Wins!` : modalHeader.textContent = "Its a Tie!";
+    modal.style.display = "block";
+  }
 
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = "none";
+  });
+
+  return { showActivePlayer, modalController, playerX, playerO };
 })();
-
-// window.addEventListener('click', displayController.closeModal());
-
-// const closeBtn = document.querySelector('.close');
-// closeBtn.addEventListener('click', () => {
-//   modal.style.display = "none";
-
-//   let board = document.querySelector('#board-container');
-//   board.style.pointerEvents = 'none';
-// });
-
-// let reset = document.querySelector('#reset-btn');
-// reset.addEventListener('click', (e) => {
-//   console.log(e);
-//   let parent = document.querySelector('#board-container');
-//   removeAllChildNodes(parent); 
-//   makeBoard.setboard();
-// });
-
-// function removeAllChildNodes(parent) {
-//   while (parent.firstChild) {
-//     parent.removeChild(parent.firstChild);
-//   }
-// }

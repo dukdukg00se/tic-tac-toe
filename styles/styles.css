@@ -140,6 +140,11 @@ footer {
   cursor: pointer;
 }
 
+.active {
+  background-color: #ffffffb3;
+  border-style: inset;
+}
+
 /*
 transition-property: all;
 transition-duration: 1s;
